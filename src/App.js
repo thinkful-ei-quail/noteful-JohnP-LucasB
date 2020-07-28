@@ -1,26 +1,61 @@
 import React from 'react';
-import logo from './logo.svg';
+
 import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <main>
+      <header>
+        <h1>noteful.</h1>
       </header>
-    </div>
-  );
+
+      <section className="Folder-page">
+        <section className="notes-display">
+
+          <div>
+            <ul>
+              <li>Note 1</li>
+              <li>Note 2</li>
+              <li>Note 3</li>
+              <li>Note 4</li>
+              <li>Note 5</li>
+              <li>Note 6</li>
+            </ul>
+          </div>
+        </section>
+
+      </section>
+
+
+      <section className="Main-page">
+        <section className="notes-display">
+
+          <div>
+            <ul>
+              <li>Note 1</li>
+              <li>Note 2</li>
+              <li>Note 3</li>
+              <li>Note 4</li>
+              <li>Note 5</li>
+              <li>Note 6</li>
+            </ul>
+          </div>
+        </section>
+
+        <hr />
+        <section className="sidebar">
+          <nav>
+            <ul>
+              <li>Folder 1</li>
+              <li>Folder 2</li>
+              <li>Folder 3</li>
+              <li>Add Folder</li>
+            </ul>
+          </nav>
+        </section>
+      </section>
+    </main>
+  )
 }
 
 export default App;
