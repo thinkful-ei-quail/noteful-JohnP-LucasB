@@ -1,70 +1,99 @@
-import React from 'react';
-import store from './dummy-store'
+import React, { Component } from 'react';
+import { Route } from 'react-router-dom';
+import AddBookmark from './AddBookmark/AddBookmark';
+import BookmarkList from './BookmarkList/BookmarkList';
+import Nav from './Nav/Nav';
+import config from './config';
 import './App.css';
-import NoteList from './notes/NoteList';
-import Folders from './sidebar/FoldersNav'
-import Note from './notes/Note'
-import NoteNav from './sidebar/NoteNav'
-import Error from './Error'
-import { Route, Switch, Link } from 'react-router-dom'
 
+const bookmarks = [
+  // {
+  //   id: 0,
+  //   title: 'Google',
+  //   url: 'http://www.google.com',
+  //   rating: '3',
+  //   desc: 'Internet-related services and products.'
+  // },
+  // {
+  //   id: 1,
+  //   title: 'Thinkful',
+  //   url: 'http://www.thinkful.com',
+  //   rating: '5',
+  //   desc: '1-on-1 learning to accelerate your way to a new high-growth tech career!'
+  // },
+  // {
+  //   id: 2,
+  //   title: 'Github',
+  //   url: 'http://www.github.com',
+  //   rating: '4',
+  //   desc: 'brings together the world\'s largest community of developers.'
+  // }
+];
 
+class App extends Component {
+  state = {
+    bookmarks,
+    error: null,
+  };
 
-export default class App extends React.Component {
+  setBookmarks = bookmarks => {
+    this.setState({
+      bookmarks,
+      error: null,
+    })
+  }
 
+  addBookmark = bookmark => {
+    this.setState({
+      bookmarks: [ ...this.state.bookmarks, bookmark ],
+    })
+  }
 
-  findNoteById = (id) => this.state.notes.find(note => note.id === id)
-
-  findFolderById = (id) => this.state.folders.find(folder => folder.id === id)
-
-  state = store;
+  componentDidMount() {
+    fetch(config.API_ENDPOINT, {
+      method: 'GET',
+      headers: {
+        'content-type': 'application/json',
+        'Authorization': `Bearer ${config.API_KEY}`
+      }
+    })
+      .then(res => {
+        if (!res.ok) {
+          throw new Error(res.status)
+        }
+        return res.json()
+      })
+      .then(this.setBookmarks)
+      .catch(error => this.setState({ error }))
+  }
 
   render() {
-    const { notes, folders } = this.state
+    const { bookmarks } = this.state
     return (
-      <>
-        <header>
-        <h1><Link to='/'>noteful.</Link></h1>
-        </header>
-        <main className="main-notes-display">
-          <Switch>
-            <Route exact path='/' render={() => <NoteList notes={notes} />} />
-            <Route exact path='/folder/:folderId' render={(props) => <NoteList notes={notes.filter((note) => note.folderId === props.match.params.folderId)} />} />
-            <Route exact path='/note/:id'
-              render={
-                ((props) => {
-                  const note = this.findNoteById(props.match.params.id)
-                  if (note) {
-                    const { name, content, modified } = note
-                    return <Note {...{ name, content, modified }} expanded={true} />
-                  } else {
-                    return <Error />
-                  }
-                })
-              }
-            />
-            <Route path='/' render={() => <Error />} />
-          </Switch>
-        </main>
-        <aside className="left-sidebar">
-          <Switch>
-            <Route exact path='/note/:id'
-              render={
-                (props) => {
-                  const note = this.findNoteById(props.match.params.id);
-                  if (note) {
-                    const folder = this.findFolderById(note.folderId)
-                    if (folder) {
-                      return <NoteNav name={folder.name} />
-                    }
-                  }
-                  return <Folders folders={folders} />
-                }
-              } />
-            <Route path='/' render={() => <Folders folders={folders} />} />
-          </Switch>
-        </aside>
-      </>
-    )
+      <main className='App'>
+        <h1>Bookmarks!</h1>
+        <Nav />
+        <div className='content' aria-live='polite'>
+          <Route
+            path='/add-bookmark'
+            render={({ history }) => {
+              return <AddBookmark
+                onAddBookmark={this.addBookmark}
+                onClickCancel={() => history.push('/')}
+              />
+            }}
+          />
+          <Route
+            exact
+            path='/'
+            render={({ history }) => {
+              return <BookmarkList bookmarks={bookmarks} />
+            }}
+          />
+        </div>
+      </main>
+    );
   }
 }
+
+export default App;
