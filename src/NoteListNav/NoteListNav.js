@@ -6,7 +6,7 @@ import { countNotesForFolder } from '../notes-helpers'
 import './NoteListNav.css'
 import Context from '../Context'
 
-export default function NoteListNav(props) {
+export default class NoteListNav extends React.Component {
   return (
     <div className='NoteListNav'>
       <ul className='NoteListNav__list'>
