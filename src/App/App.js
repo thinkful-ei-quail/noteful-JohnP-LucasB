@@ -15,40 +15,67 @@ class App extends Component {
         folders: []
     };
 
+    getFolders() {
+        fetch('http://localhost:9090/folders')
+            .then(res => {
+                if(!res.ok) {
+                    throw new Error('Something went wrong, please try again.')
+                }
+                return res.json()
+            })
+            .then(data => {
+                this.setState({
+                    folders: data
+                })
+            })
+            .catch(err => console.log(err.message))
+    }
+
+    getNotes() {
+        fetch('http://localhost:9090/notes')
+            .then(res => {
+                if(!res.ok) {
+                    throw new Error('Something went wrong, please try again.')
+                }
+                return res.json()
+            })
+            .then(data => {
+                this.setState({
+                    notes: data
+                })
+            })
+            .catch(err => console.log(err.message))
+    }
+
+    addFolder() {
+        console.log('clicked add folder')
+    }
+
     componentDidMount() {
-        // fake date loading from API call
-        setTimeout(() => this.setState(dummyStore), 600);
+        this.getFolders()
+        this.getNotes()
     }
 
     renderNavRoutes() {
-        const {notes, folders} = this.state;
+        
         return (
             <>
-                {['/', '/folder/:folderId'].map(path => (
+                
+                    {['/', '/folder/:folderId'].map(path => (
+                        <Route
+                            exact
+                            key={path}
+                            path={path}
+                            component={NoteListNav}
+                        />
+                    ))}
                     <Route
-                        exact
-                        key={path}
-                        path={path}
-                        render={routeProps => (
-                            <NoteListNav
-                                folders={folders}
-                                notes={notes}
-                                {...routeProps}
-                            />
-                        )}
+                        path="/note/:noteId"
+                        component={NotePageNav}
                     />
-                ))}
-                <Route
-                    path="/note/:noteId"
-                    render={routeProps => {
-                        const {noteId} = routeProps.match.params;
-                        const note = findNote(notes, noteId) || {};
-                        const folder = findFolder(folders, note.folderId);
-                        return <NotePageNav {...routeProps} folder={folder} />;
-                    }}
-                />
-                <Route path="/add-folder" component={NotePageNav} />
-                <Route path="/add-note" component={NotePageNav} />
+                    <Route path="/add-folder" component={NotePageNav} />
+                    <Route path="/add-note" component={NotePageNav} />
+               
             </>
         );
     }
@@ -90,17 +117,25 @@ class App extends Component {
     }
 
     render() {
+        const contextValue ={
+            folders: this.state.folders,
+            notes: this.state.notes,
+            addFolder: this.addFolder,
+        }
+       
         return (
-            <div className="App">
-                <nav className="App__nav">{this.renderNavRoutes()}</nav>
-                <header className="App__header">
-                    <h1>
-                        <Link to="/">Noteful</Link>{' '}
-                        <FontAwesomeIcon icon="check-double" />
-                    </h1>
-                </header>
-                <main className="App__main">{this.renderMainRoutes()}</main>
-            </div>
+            <Context.Provider value={contextValue}>
+                <div className="App">
+                    <nav className="App__nav">{this.renderNavRoutes()}</nav>
+                    <header className="App__header">
+                        <h1>
+                            <Link to="/">Noteful</Link>{' '}
+                            <FontAwesomeIcon icon="check-double" />
+                        </h1>
+                    </header>
+                    <main className="App__main">{this.renderMainRoutes()}</main>
+                </div>
+            </Context.Provider>
         );
     }
 }
