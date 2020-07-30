@@ -5,9 +5,19 @@ import CircleButton from '../CircleButton/CircleButton'
 import ApiContext from '../ApiContext'
 import { countNotesForFolder } from '../notes-helpers'
 import './NoteListNav.css'
+import { isThisMonth } from 'date-fns'
+import AddFolder from '../AddFolder/AddFolder';
 
 export default class NoteListNav extends React.Component {
   static contextType = ApiContext;
+
+  state = {
+    toggleAddFolder: false
+  }
+
+  handleToggleAddFolder() {
+    this.setState({toggleAddFolder: !this.state.toggleAddFolder})
+  }
 
   render() {
     const { folders=[], notes=[] } = this.context
@@ -27,13 +37,14 @@ export default class NoteListNav extends React.Component {
               </NavLink>
             </li>
           )}
+          {this.state.toggleAddFolder && <AddFolder />}
         </ul>
+  
         <div className='NoteListNav__button-wrapper'>
           <CircleButton
-            tag={Link}
-            to='/add-folder'
             type='button'
             className='NoteListNav__add-folder-button'
+            onClick={() => this.handleToggleAddFolder()}
           >
             <FontAwesomeIcon icon='plus' />
             <br />
