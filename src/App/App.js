@@ -5,13 +5,13 @@ import NoteListNav from '../NoteListNav/NoteListNav';
 import NotePageNav from '../NotePageNav/NotePageNav';
 import NoteListMain from '../NoteListMain/NoteListMain';
 import NotePageMain from '../NotePageMain/NotePageMain';
-
 import ApiContext from '../ApiContext';
 import config from '../config';
 import './App.css';
 import AddNote from '../AddNote/AddNote';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
-import { findDOMNode } from 'react-dom';
+import FetchError from '../FetchError'
+import RouteError from '../RouteError'
 
 class App extends Component {
     state = {
@@ -45,7 +45,7 @@ class App extends Component {
             notes: this.state.notes.filter(note => note.id !== noteId)
         });
     };
-    
+
     handleAddNote = note => {
         this.setState({
             notes: [...this.state.notes, note]
@@ -60,6 +60,7 @@ class App extends Component {
 
     renderNavRoutes() {
         return (
+            <FetchError>
             <>
                 {['/', '/folder/:folderId'].map(path => (
                     <Route
@@ -73,11 +74,13 @@ class App extends Component {
                 <Route path="/add-folder" component={NotePageNav} />
 
             </>
+            </FetchError>
         );
     }
 
     renderMainRoutes() {
         return (
+            <RouteError>
             <>
                 {['/', '/folder/:folderId'].map(path => (
                     <Route
@@ -90,6 +93,7 @@ class App extends Component {
                 <Route path="/add-note" component={AddNote} />
                 <Route path="/note/:noteId" component={NotePageMain} />
             </>
+            </RouteError>
         );
     }
 

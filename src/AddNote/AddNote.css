@@ -1,0 +1,26 @@
+.AddNoteContainer{
+    display: grid ;
+    grid-template: auto 1fr auto / auto 1fr auto;}
+
+
+form{
+    grid-column: 1/1;
+    color: #dedede;
+}
+
+input, textarea, select, button{
+    width: 30rem;
+    padding: 1rem;
+    font-size: 2vw;
+}
+
+
+p{
+    color: #dedede;
+}
+
+
+button{
+    font-weight: 900;
+    letter-spacing: 0.3em;
+}

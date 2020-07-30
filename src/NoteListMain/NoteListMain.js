@@ -6,11 +6,8 @@ import CircleButton from '../CircleButton/CircleButton'
 import ApiContext from '../ApiContext'
 import { getNotesForFolder } from '../notes-helpers'
 import './NoteListMain.css'
-<<<<<<< HEAD
-import { shape, string } from 'prop-types'
-=======
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary'
->>>>>>> ef8786b3ce46e94b016d07bce97c3cd8555d52d1
+import { shape, string } from 'prop-types'
 
 export default class NoteListMain extends React.Component {
   static defaultProps = {

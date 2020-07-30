@@ -2,7 +2,8 @@ import React from 'react'
 import ApiContext from '../ApiContext'
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 import PropTypes from 'prop-types';
-
+import './AddFolder.css'
+import FetchError from '../FetchError'
 export default class AddFolder extends React.Component{
 static contextType = ApiContext;
 
@@ -28,9 +29,8 @@ handleAddFolder(evt) {
     const options = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({name: this.state.folderName})}
 
     fetch(BASE_URL, options)
-        .then(res => res.ok ? res.json() : console.log('An error occurred.'))
+        .then(res => res.ok ? res.json() : new Error(res.message))
         .then(res => {
-
             this.context.addFolder(res);
         })
 }
@@ -45,22 +45,8 @@ validateFolder(folder) {
 
 render(){
     return(
-<<<<<<< HEAD
-        <li className="AddFolder">
-            <h2>Add New Folder</h2>
-            <form className="AddFolder">
-                <input type="text" className="name"
-                    name="name" id="name"
-                    ref={this.nameInput} value={this.state.folderName}
-                    onChange={(evt) => this.handleFolderName(evt)}
-                >
-                </input>
-                <button type="submit" onClick={(evt) => this.handleAddFolder(evt)}>+</button>
-            </form>
-        </li>
-=======
-        <ErrorBoundary>
-            <li>
+        <FetchError>
+            <li className='AddFolderLi'>
                 <h2>Add New Folder</h2>
                 <form>
                     <input type="text" className="name"
@@ -70,11 +56,10 @@ render(){
                     >
                     </input>
                     {!this.state.isValid && <p>The foldername cannot be empty</p>}
-                    {this.state.isValid && <button type="submit" onClick={(evt) => this.handleAddFolder(evt)}>+</button>}
+                    {this.state.isValid && <button className='submitfold' type="submit" onClick={(evt) => this.handleAddFolder(evt)}>Submit</button>}
                 </form>
             </li>
-        </ErrorBoundary>
->>>>>>> ef8786b3ce46e94b016d07bce97c3cd8555d52d1
+        </FetchError>
     )
 }
 }

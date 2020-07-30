@@ -1,7 +1,34 @@
-.AddFolder {
-    color: #dedede;
+.AddFolderLi {
+
+    list-style-type: none;
+    color: #b5b3b3;
+    display:flex;
+    flex-flow: column;
+    font-family: var(--custom-font);
+    font-size: 20px;
+    margin-left: 12vw;
+    max-width: 180px;
+    padding: 8px 16px;
   }
 
   .AddFolder h2 {
-    margin-left: 16px;
+    flex: 1;
+
+  }
+
+
+  .submitfold{
+    flex: 1;
+    font-size: 1.2vw;
+    max-width: 10vw;
+    border-radius: 50%;
+
+
+  }
+
+  .name{
+    flex: 1;
+
+    max-width: 10vw;
+
   }
