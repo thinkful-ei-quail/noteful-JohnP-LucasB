@@ -1,5 +1,7 @@
 import React from 'react'
 import ApiContext from '../ApiContext'
+import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
+import PropTypes from 'prop-types';
 
 export default class AddFolder extends React.Component{
 static contextType = ApiContext;
@@ -8,12 +10,14 @@ constructor(props){
     super(props);
     this.nameInput=React.createRef();
     this.state ={
-        folderName: ''
+        folderName: '',
+        isValid: false
     }
 }
 
 handleFolderName(evt) {
-    this.setState({folderName: evt.target.value})
+    this.setState({folderName: evt.target.value});
+    this.validateFolder(evt.target.value);
 }
 
 handleAddFolder(evt) {
@@ -31,8 +35,17 @@ handleAddFolder(evt) {
         })
 }
 
+validateFolder(folder) {
+    if (folder.length === 0) {
+        this.setState({isValid: false});
+    } else {
+        this.setState({isValid: true});
+    }
+}
+
 render(){
     return(
+<<<<<<< HEAD
         <li className="AddFolder">
             <h2>Add New Folder</h2>
             <form className="AddFolder">
@@ -45,7 +58,27 @@ render(){
                 <button type="submit" onClick={(evt) => this.handleAddFolder(evt)}>+</button>
             </form>
         </li>
+=======
+        <ErrorBoundary>
+            <li>
+                <h2>Add New Folder</h2>
+                <form>
+                    <input type="text" className="name"
+                        name="name" id="name"
+                        ref={this.nameInput} value={this.state.folderName}
+                        onChange={(evt) => this.handleFolderName(evt)}
+                    >
+                    </input>
+                    {!this.state.isValid && <p>The foldername cannot be empty</p>}
+                    {this.state.isValid && <button type="submit" onClick={(evt) => this.handleAddFolder(evt)}>+</button>}
+                </form>
+            </li>
+        </ErrorBoundary>
+>>>>>>> ef8786b3ce46e94b016d07bce97c3cd8555d52d1
     )
 }
+}
 
+AddFolder.propTypes = {
+    folderName: PropTypes.string.isRequired
 }

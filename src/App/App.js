@@ -10,6 +10,8 @@ import ApiContext from '../ApiContext';
 import config from '../config';
 import './App.css';
 import AddNote from '../AddNote/AddNote';
+import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
+import { findDOMNode } from 'react-dom';
 
 class App extends Component {
     state = {
@@ -43,12 +45,12 @@ class App extends Component {
             notes: this.state.notes.filter(note => note.id !== noteId)
         });
     };
+    
     handleAddNote = note => {
         this.setState({
             notes: [...this.state.notes, note]
         })
     }
-
 
     handleAddFolder = folder => {
         this.setState({
@@ -100,18 +102,20 @@ class App extends Component {
             newNote:this.handleAddNote
         };
         return (
-            <ApiContext.Provider value={value}>
-                <div className="App">
-                    <nav className="App__nav">{this.renderNavRoutes()}</nav>
-                    <header className="App__header">
-                        <h1>
-                            <Link to="/">Noteful</Link>{' '}
-                            <FontAwesomeIcon icon="check-double" />
-                        </h1>
-                    </header>
-                    <main className="App__main">{this.renderMainRoutes()}</main>
-                </div>
-            </ApiContext.Provider>
+            <ErrorBoundary>
+                <ApiContext.Provider value={value}>
+                    <div className="App">
+                            <nav className="App__nav">{this.renderNavRoutes()}</nav>
+                        <header className="App__header">
+                            <h1>
+                                <Link to="/">Noteful</Link>{' '}
+                                <FontAwesomeIcon icon="check-double" />
+                            </h1>
+                        </header>
+                        <main className="App__main">{this.renderMainRoutes()}</main>
+                    </div>
+                </ApiContext.Provider>
+            </ErrorBoundary>
         );
     }
 }
