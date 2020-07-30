@@ -33,9 +33,9 @@ handleAddFolder(evt) {
 
 render(){
     return(
-        <li>
+        <li className="AddFolder">
             <h2>Add New Folder</h2>
-            <form>
+            <form className="AddFolder">
                 <input type="text" className="name"
                     name="name" id="name"
                     ref={this.nameInput} value={this.state.folderName}
