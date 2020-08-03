@@ -94,6 +94,10 @@ export default class AddNote extends React.Component {
                 this.context.newNote(res);
             })
             .then(this.props.history.goBack())
+            .catch(error => {
+                alert(error,);
+                console.error({ error });
+            });
     }
 
 
@@ -129,4 +133,7 @@ export default class AddNote extends React.Component {
     }
 }
 
-AddNote.propTypes = { history: PropTypes.shape({ goBack: PropTypes.func }) };
+AddNote.propTypes = { history: PropTypes.shape({ goBack: PropTypes.func }),notename:PropTypes.string.isRequired,
+notecontent:PropTypes.string.isRequired,
+notefolder:PropTypes.string.isRequired,
+notemodified:PropTypes.string.isRequired, };

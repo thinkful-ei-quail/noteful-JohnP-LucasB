@@ -1,6 +1,5 @@
 import React from 'react'
 import ApiContext from '../ApiContext'
-import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 import PropTypes from 'prop-types';
 import './AddFolder.css'
 import FetchError from '../FetchError'
@@ -33,6 +32,10 @@ handleAddFolder(evt) {
         .then(res => {
             this.context.addFolder(res);
         })
+        .catch(error => {
+            alert(error,);
+            console.error({ error });
+        });
 }
 
 validateFolder(folder) {
@@ -64,6 +67,7 @@ render(){
 }
 }
 
+const newLocal = PropTypes.string.isRequired;
 AddFolder.propTypes = {
-    folderName: PropTypes.string.isRequired
+    folderName: newLocal
 }

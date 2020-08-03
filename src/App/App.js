@@ -16,7 +16,8 @@ import RouteError from '../RouteError'
 class App extends Component {
     state = {
         notes: [],
-        folders: []
+        folders: [],
+        error:null
     };
 
     componentDidMount() {
@@ -26,9 +27,9 @@ class App extends Component {
         ])
             .then(([notesRes, foldersRes]) => {
                 if (!notesRes.ok)
-                    return notesRes.json().then(e => Promise.reject(e));
+                    return notesRes.json().then(e => Promise.reject(e.message));
                 if (!foldersRes.ok)
-                    return foldersRes.json().then(e => Promise.reject(e));
+                    return foldersRes.json().then(e => Promise.reject(e.message));
 
                 return Promise.all([notesRes.json(), foldersRes.json()]);
             })
@@ -36,6 +37,7 @@ class App extends Component {
                 this.setState({ notes, folders });
             })
             .catch(error => {
+                alert(error,);
                 console.error({ error });
             });
     }
@@ -61,19 +63,19 @@ class App extends Component {
     renderNavRoutes() {
         return (
             <FetchError>
-            <>
-                {['/', '/folder/:folderId'].map(path => (
-                    <Route
-                        exact
-                        key={path}
-                        path={path}
-                        component={NoteListNav}
-                    />
-                ))}
-                <Route path="/note/:noteId" component={NotePageNav} />
-                <Route path="/add-folder" component={NotePageNav} />
+                <>
+                    {['/', '/folder/:folderId'].map(path => (
+                        <Route
+                            exact
+                            key={path}
+                            path={path}
+                            component={NoteListNav}
+                        />
+                    ))}
+                    <Route path="/note/:noteId" component={NotePageNav} />
+                    <Route path="/add-folder" component={NotePageNav} />
 
-            </>
+                </>
             </FetchError>
         );
     }
@@ -81,18 +83,18 @@ class App extends Component {
     renderMainRoutes() {
         return (
             <RouteError>
-            <>
-                {['/', '/folder/:folderId'].map(path => (
-                    <Route
-                        exact
-                        key={path}
-                        path={path}
-                        component={NoteListMain}
-                    />
-                ))}
-                <Route path="/add-note" component={AddNote} />
-                <Route path="/note/:noteId" component={NotePageMain} />
-            </>
+                <>
+                    {['/', '/folder/:folderId'].map(path => (
+                        <Route
+                            exact
+                            key={path}
+                            path={path}
+                            component={NoteListMain}
+                        />
+                    ))}
+                    <Route path="/add-note" component={AddNote} />
+                    <Route path="/note/:noteId" component={NotePageMain} />
+                </>
             </RouteError>
         );
     }
@@ -103,13 +105,13 @@ class App extends Component {
             folders: this.state.folders,
             deleteNote: this.handleDeleteNote,
             addFolder: this.handleAddFolder,
-            newNote:this.handleAddNote
+            newNote: this.handleAddNote
         };
         return (
             <ErrorBoundary>
                 <ApiContext.Provider value={value}>
                     <div className="App">
-                            <nav className="App__nav">{this.renderNavRoutes()}</nav>
+                        <nav className="App__nav">{this.renderNavRoutes()}</nav>
                         <header className="App__header">
                             <h1>
                                 <Link to="/">Noteful</Link>{' '}
